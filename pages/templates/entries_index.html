@@ -1,0 +1,14 @@
+{% extends base.html %}
+{% load static %}
+
+{% block content %}
+    <ul>
+        {% for entry in entries_index %}
+        <li>
+            {{ entry.entry_title }}
+            {{ entry.short_content }}
+            {{ entry.publish_date }}
+        </li>
+    </ul>
+
+{% endblock content %}

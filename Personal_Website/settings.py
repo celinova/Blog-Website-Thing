@@ -11,15 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
-
-# Environmment variables path
-env_path = find_dotenv()
-
-# load environment variables
-load_dotenv(env_path)
-
-
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap5",
-    "sso", # single sign on for me to edit pages
+    "login",
     "pages",
 ]
 
@@ -117,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "EST"
 
 USE_I18N = True
 
@@ -138,7 +130,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "sso.UserModel"
+AUTH_USER_MODEL = "login.UserModel"
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
