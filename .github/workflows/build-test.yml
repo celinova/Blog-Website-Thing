@@ -36,7 +36,7 @@ jobs:
                   --cache-to type=local,dest=/home/runner/.cache/docker,mode=max \
                   --load \
                   -t blog-website:latest \
-                  -f Dockerfile \
+                  -f .docker/Dockerfile \
                   .
 
             - name: Compose up
