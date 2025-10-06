@@ -8,3 +8,11 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/Blog-Website-Thing
+
+  django-test:
+    <<: *Blog-Website-Thing
+    restart: "no"
+    depends_on:
+      - django-dev-server:
+        condition: service_healthy
+    command: /test-start
