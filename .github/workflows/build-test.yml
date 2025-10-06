@@ -37,6 +37,7 @@ jobs:
                   --load \
                   -t Blog-Website-Thing:latest \
                   -f Dockerfile \
+                  .
 
             - name: Compose up
               run: docker compose up --exit-code-from django-test
