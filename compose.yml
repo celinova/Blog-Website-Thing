@@ -1,11 +1,11 @@
-name: 'Blog-Website-Thing'
+name: 'blog-website'
 
 x-django-environment: &django-environment
   SECRET_KEY: ${SECRET_KEY:-django-insecure$$Personal_Website.settings.local}
   ENV: ${ENV:-dev}
 
-x-app: &Blog-Website-Thing
-  image: Blog-Website-Thing:latest
+x-app: &blog-website
+  image: blog-website:latest
   environment:
     <<: *django-environment
   restart: always
@@ -18,9 +18,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: Blog-Website-Thing:latest
+    image: blog-website:latest
     pull_policy: build
-    <<: *Blog-Website-Thing
+    <<: *blog-website
     ports:
       - "0.0.0.0:8000:8000"
     command: /dev-start
@@ -32,7 +32,7 @@ services:
       start_period: 15s
 
   django-production-server:
-    <<: *Blog-Website-Thing
+    <<: *blog-website
     ports:
       - "0.0.0.0:8021:8000"
     command: /prod-start
@@ -44,7 +44,7 @@ services:
       start_period: 15s
 
   django-test:
-    <<: *Blog-Website-Thing
+    <<: *blog-website
     restart: "no"
     depends_on:
       - django-dev-server:

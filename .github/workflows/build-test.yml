@@ -35,7 +35,7 @@ jobs:
                   --cache-from type=local,src=/home/runner/.cache/docker \
                   --cache-to type=local,dest=/home/runner/.cache/docker,mode=max \
                   --load \
-                  -t Blog-Website-Thing:latest \
+                  -t blog-website:latest \
                   -f Dockerfile \
                   .
 
