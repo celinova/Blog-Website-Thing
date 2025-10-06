@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
 from pathlib import Path
 from decouple import Csv, config
 
@@ -25,9 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS", default="127.0.0.1,localhost,0.0.0.0", cast=Csv()
+)
 
 
 # Application definition
@@ -46,7 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "Personal_Website.health_check.HealthCheckMiddleware",
+    "Personal_Website.middleware.health_check.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

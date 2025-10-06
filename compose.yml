@@ -3,6 +3,7 @@ name: 'blog-website'
 x-django-environment: &django-environment
   SECRET_KEY: ${SECRET_KEY:-django-insecure$$Personal_Website.settings.local}
   ENV: ${ENV:-dev}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-127.0.0.1,localhost,0.0.0.0,django-dev-server}
 
 x-app: &blog-website
   image: blog-website:latest
@@ -12,20 +13,21 @@ x-app: &blog-website
   pull_policy: never
   volumes:
     - .:/Personal_Website
+    - tox:/tmp/.tox
 
 services:
   django-dev-server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: .docker/Dockerfile
     image: blog-website:latest
     pull_policy: build
     <<: *blog-website
     ports:
-      - "0.0.0.0:8000:8000"
+      - "0.0.0.0:8021:8000"
     command: /dev-start
     healthcheck:
-      test: "curl --fail --silent --insecure --writeout 'HTTP CODE : %{http_code}\n' http://localhost:8000/health"
+      test: "curl http://localhost:8000/health"
       interval: 10s
       timeout: 5s
       retries: 10
@@ -34,10 +36,10 @@ services:
   django-production-server:
     <<: *blog-website
     ports:
-      - "0.0.0.0:8021:8000"
+      - "0.0.0.0:8022:8000"
     command: /prod-start
     healthcheck:
-      test: "curl --fail --silent --insecure --writeout 'HTTP CODE : %{http_code}\n' http://localhost:8000/health"
+      test: "curl http://localhost:8022/health"
       interval: 10s
       timeout: 5s
       retries: 10
@@ -50,3 +52,6 @@ services:
       django-dev-server:
         condition: service_healthy
     command: /test-start
+
+volumes:
+  tox:

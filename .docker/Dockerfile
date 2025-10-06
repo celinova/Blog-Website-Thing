@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.13.4-slim
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -25,5 +25,12 @@ WORKDIR /Blog-Website-Thing
 
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
+
+# Copy scripts
+COPY ./.docker/dev-start /
+COPY ./.docker/prod-start /
+COPY ./.docker/test-start /
+
+RUN chmod +x /dev-start /prod-start /test-start
 
 COPY . .

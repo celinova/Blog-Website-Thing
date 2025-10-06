@@ -1,4 +1,5 @@
-from django.http import HttpeResponse
+from django.http import HttpResponse
+
 
 class HealthCheckMiddleware:
     def __init__(self, get_response):
@@ -6,6 +7,5 @@ class HealthCheckMiddleware:
 
     def __call__(self, request):
         if request.path == "/health":
-            return HttpeResponse("ok")
-        
+            return HttpResponse("ok")
         return self.get_response(request)
