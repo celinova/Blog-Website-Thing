@@ -1,13 +1,47 @@
+name: 'Blog-Website-Thing'
+
+x-django-environment: &django-environment
+  SECRET_KEY: ${SECRET_KEY:-django-insecure$$Personal_Website.settings.local}
+  ENV: ${ENV:-dev}
+
+x-app: &Blog-Website-Thing
+  image: Blog-Website-Thing:latest
+  environment:
+    <<: *django-environment
+  restart: always
+  pull_policy: never
+  volumes:
+    - .:/Personal_Website
+
 services:
   django-dev-server:
     build:
       context: .
       dockerfile: Dockerfile
+    image: Blog-Website-Thing:latest
+    pull_policy: build
+    <<: *Blog-Website-Thing
     ports:
-      - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/Blog-Website-Thing
+      - "0.0.0.0:8000:8000"
+    command: /dev-start
+    healthcheck:
+      test: "curl --fail --silent --insecure --writeout 'HTTP CODE : %{http_code}\n' http://localhost:8000/health"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  django-production-server:
+    <<: *Blog-Website-Thing
+    ports:
+      - "0.0.0.0:8021:8000"
+    command: /prod-start
+    healthcheck:
+      test: "curl --fail --silent --insecure --writeout 'HTTP CODE : %{http_code}\n' http://localhost:8000/health"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
 
   django-test:
     <<: *Blog-Website-Thing

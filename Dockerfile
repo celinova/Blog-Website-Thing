@@ -1,8 +1,25 @@
-FROM python:3.13.4-slim-bullseye
+FROM python:3.9-slim
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONBUFFERED 1
+ENV NPM_CONFIG_CACHE=/tmp/.npm
+
+# Install system packages as root, including sudo
+RUN apt-get update\
+    && apt-get install -y --no-install-recommends \
+        bash \
+        build-essential \
+        libpq-dev \
+        gettext \
+        curl \
+        nodejs \
+        npm \
+        sudo \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/*
+    
+RUN pip install --upgrade pip
 
 WORKDIR /Blog-Website-Thing
 
