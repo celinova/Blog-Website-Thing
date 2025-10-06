@@ -47,6 +47,6 @@ services:
     <<: *blog-website
     restart: "no"
     depends_on:
-      - django-dev-server:
+      django-dev-server:
         condition: service_healthy
     command: /test-start
